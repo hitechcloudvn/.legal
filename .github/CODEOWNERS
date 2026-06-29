@@ -1,0 +1,29 @@
+# CODEOWNERS
+
+# This file defines code owners for automatic review assignment.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything
+* @hitechcloud-vietnam/maintainers
+
+# Legal documents
+/LICENSE @hitechcloud-vietnam/legal
+/NOTICE @hitechcloud-vietnam/legal
+/COMMERCIAL-LICENSE.md @hitechcloud-vietnam/legal
+/SECURITY.md @hitechcloud-vietnam/security
+
+# Documentation
+/docs/ @hitechcloud-vietnam/docs
+/README-LICENSE.md @hitechcloud-vietnam/docs
+/CONTRIBUTING.md @hitechcloud-vietnam/docs
+/CODE_OF_CONDUCT.md @hitechcloud-vietnam/docs
+/SUPPORT.md @hitechcloud-vietnam/docs
+
+# GitHub workflows and automation
+/.github/ @hitechcloud-vietnam/devops
+/.github/workflows/ @hitechcloud-vietnam/devops
+/.github/ISSUE_TEMPLATE/ @hitechcloud-vietnam/devops
+/.github/CODEOWNERS @hitechcloud-vietnam/admin
+/.github/template-config.yml @hitechcloud-vietnam/devops
+/.github/labeler.yml @hitechcloud-vietnam/devops
+/.github/dependabot.yml @hitechcloud-vietnam/devops

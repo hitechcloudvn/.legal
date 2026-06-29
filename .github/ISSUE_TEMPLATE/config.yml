@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/blob/main/SECURITY.md
+    about: Do not open public issues for security vulnerabilities. Follow our security policy.
+  - name: Commercial Licensing
+    url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/blob/main/COMMERCIAL-LICENSE.md
+    about: For commercial licensing requests, see COMMERCIAL-LICENSE.md.
+  - name: Support
+    url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/blob/main/SUPPORT.md
+    about: For general support questions, see SUPPORT.md.
+  - name: Documentation
+    url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/tree/main/docs
+    about: Check the docs/ directory for detailed documentation.

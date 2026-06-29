@@ -1,0 +1,116 @@
+# SHA-256 Integrity Verification Workflow
+
+# This workflow automatically verifies SHA-256 checksums for all code files
+# when changes are pushed to the repository. It generates and stores checksums
+# to ensure file integrity and detect unauthorized modifications.
+
+name: Verify SHA-256
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  verify-sha256:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Generate SHA-256 checksums
+        id: checksums
+        run: |
+          echo "Generating SHA-256 checksums for all tracked files..."
+          
+          # Generate checksums for all tracked files (excluding .git directory)
+          find . -type f -not -path './.git/*' -not -path './sha256-checksums.txt' | sort | while read file; do
+            sha256sum "$file"
+          done > sha256-checksums-new.txt
+          
+          # Store the checksum file path
+          echo "checksum_file=sha256-checksums-new.txt" >> "$GITHUB_OUTPUT"
+          
+          # Count files processed
+          FILE_COUNT=$(wc -l < sha256-checksums-new.txt)
+          echo "file_count=$FILE_COUNT" >> "$GITHUB_OUTPUT"
+          echo "Processed $FILE_COUNT files"
+
+      - name: Compare with existing checksums
+        id: compare
+        run: |
+          if [ -f "sha256-checksums.txt" ]; then
+            echo "Existing checksums found. Comparing..."
+            
+            # Compare checksums
+            if diff -u sha256-checksums.txt sha256-checksums-new.txt > checksum-diff.txt 2>&1; then
+              echo "status=unchanged" >> "$GITHUB_OUTPUT"
+              echo "All checksums match. No changes detected."
+            else
+              echo "status=changed" >> "$GITHUB_OUTPUT"
+              echo "Checksum changes detected:"
+              cat checksum-diff.txt
+              
+              # Identify changed files
+              CHANGED_FILES=$(diff sha256-checksums.txt sha256-checksums-new.txt | grep "^[<>]" | awk '{print $2}' | sort -u)
+              echo "changed_files<<EOF" >> "$GITHUB_OUTPUT"
+              echo "$CHANGED_FILES" >> "$GITHUB_OUTPUT"
+              echo "EOF" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "status=new" >> "$GITHUB_OUTPUT"
+            echo "No existing checksums found. Creating initial checksum file."
+          fi
+
+      - name: Update checksum file
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          cp sha256-checksums-new.txt sha256-checksums.txt
+          echo "Checksum file updated."
+
+      - name: Commit checksums
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sha256-checksums.txt
+          git diff --cached --quiet || git commit -m "Update SHA-256 checksums
+
+          - Regenerated checksums for ${{ steps.checksums.outputs.file_count }} files
+          - Status: ${{ steps.compare.outputs.status }}"
+          git push
+
+      - name: Generate verification report
+        if: always()
+        run: |
+          echo "## SHA-256 Verification Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Status:** ${{ steps.compare.outputs.status }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Files processed:** ${{ steps.checksums.outputs.file_count }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Trigger:** ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Branch:** ${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          
+          if [ "${{ steps.compare.outputs.status }}" = "changed" ]; then
+            echo "### Changed Files" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.compare.outputs.changed_files }}" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Fail on integrity violation
+        if: steps.compare.outputs.status == 'changed' && github.event_name == 'pull_request'
+        run: |
+          echo "::error::File integrity check failed. SHA-256 checksums do not match."
+          echo "This may indicate unauthorized modifications."
+          echo "Changed files: ${{ steps.compare.outputs.changed_files }}"
+          exit 1
