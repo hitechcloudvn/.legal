@@ -63,7 +63,7 @@ If a contribution introduces external legal references or copied text, document 
 
 When a change affects legal identity, trademark wording, commercial-use boundaries, public branding, or repository policy, keep the wording synchronized across:
 
-- `README.md`
+- `README-LICENSE.md`
 - `NOTICE`
 - `LICENSE`
 - `COMMERCIAL-LICENSE.md`
@@ -160,7 +160,7 @@ Nếu đóng góp引入 tham chiếu pháp lý bên ngoài hoặc văn bản đ�
 
 Khi thay đổi ảnh hưởng đến danh tính pháp lý, nội dung nhãn hiệu, ranh giới sử dụng thương mại, thương hiệu công chúng hoặc chính sách kho mã nguồn, giữ nội dung đồng bộ giữa:
 
-- `README.md`
+- `README-LICENSE.md`
 - `NOTICE`
 - `LICENSE`
 - `COMMERCIAL-LICENSE.md`

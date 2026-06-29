@@ -67,7 +67,7 @@ When updating repository materials:
 - do not remove legal disclaimers without replacing them consistently across the repository;
 - do not use third-party logos or brand assets unless there is a confirmed legal basis to do so;
 - do not introduce language implying official third-party relationships without written authorization; and
-- keep legal wording synchronized across `README.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, and `docs/legal-vi.md`.
+- keep legal wording synchronized across `README-LICENSE.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, and `docs/legal-vi.md`.
 
 ## Questions
 

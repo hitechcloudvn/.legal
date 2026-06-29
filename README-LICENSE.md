@@ -36,7 +36,7 @@ Copyright (c) 2026 Pho Tue SoftWare And Technology Solutions Joint Stock Company
 ├── CONTRIBUTING.md                 # Contribution guidelines
 ├── SECURITY.md                     # Security vulnerability reporting
 ├── SUPPORT.md                      # Support channels and guidance
-├── README.md                       # This file
+├── README-LICENSE.md               # This file
 ├── .github/
 │   ├── CODEOWNERS                  # Automatic review assignment
 │   ├── template-config.yml         # Template configuration
@@ -151,7 +151,7 @@ Copyright (c) 2026 Công ty Cổ Phần Giải Pháp Công Nghệ và Phần M�
 ├── CONTRIBUTING.md                 # Hướng dẫn đóng góp
 ├── SECURITY.md                     # Báo cáo lỗ hổng bảo mật
 ├── SUPPORT.md                      # Kênh hỗ trợ và hướng dẫn
-├── README.md                       # Tệp tin này
+├── README-LICENSE.md               # Tệp tin này
 ├── .github/
 │   ├── CODEOWNERS                  # Phân quyền review tự động
 │   ├── template-config.yml         # Cấu hình template
