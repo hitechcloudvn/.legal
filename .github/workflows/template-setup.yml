@@ -96,13 +96,33 @@ jobs:
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/websites, products, and software solutions owned and distributed by/websites, products, and software solutions owned and distributed by/" COMMERCIAL-LICENSE.md
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" COMMERCIAL-LICENSE.md
 
       - name: Update CONTRIBUTING.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
           sed -i "s/# Contributing to HiTechCloud Legal Repository/# Contributing to ${PRODUCT} Legal Repository/" CONTRIBUTING.md
+          sed -i "s/HiTechCloud legal documents repository/${PRODUCT} legal documents repository/" CONTRIBUTING.md
+
+      - name: Update SECURITY.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          sed -i "s/HiTechCloud product or repository/${PRODUCT} product or repository/" SECURITY.md
+
+      - name: Update docs
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          # licensing.md
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing.md
+          # legal-notice.md
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/legal-notice.md
+          # licensing-vi.md
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing-vi.md
+          # legal-vi.md
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/legal-vi.md
 
       - name: Commit customization
         if: steps.product.outputs.skip != 'true'
@@ -113,7 +133,11 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "Customize template for ${PRODUCT}
 
-          - Update README.md with product name
+          - Update README.md with product name (EN + VN)
           - Update NOTICE with product name
-          - Update CONTRIBUTING.md with product name"
+          - Update COMMERCIAL-LICENSE.md with product name
+          - Update CONTRIBUTING.md with product name
+          - Update SECURITY.md with product name
+          - Update docs/licensing.md, docs/legal-notice.md
+          - Update docs/licensing-vi.md, docs/legal-vi.md"
           git push
