@@ -9,10 +9,33 @@
 # Product name derived from repository name
 # Example: "nvidia-ai-hub" -> "NVIDIA AI Hub"
 # Example: "sparkdeck" -> "SparkDeck"
+# Example: "ai-hub" -> "AI Hub"
+# Example: "cloud-platform" -> "Cloud Platform"
+# Example: "data-platform" -> "Data Platform"
+# Example: "ml-platform" -> "ML Platform"
+# Example: "api-gateway" -> "API Gateway"
+# Example: "dev-tools" -> "Dev Tools"
 template_product_name: "HiTechCloud Legal"
+
+# Product name slug (lowercase, hyphenated)
+# Derived from repository name by removing "hitechcloud-" prefix
+template_product_slug: "hitechcloud"
 
 # Company information (do not change unless authorized)
 template_company_name_en: "Pho Tue SoftWare And Technology Solutions Joint Stock Company"
 template_company_name_vi: "CÔNG TY CỔ PHẦN GIẢI PHÁP CÔNG NGHỆ VÀ PHẦN MỀM PHỔ TUỆ"
 template_tax_code: "0318222903"
 template_duns_number: "557339920"
+
+# Special case product name mappings
+# Add new mappings here when you create a new product repo
+# Format: slug: "Display Name"
+product_name_mappings:
+  nvidia-ai-hub: "NVIDIA AI Hub"
+  sparkdeck: "SparkDeck"
+  ai-hub: "AI Hub"
+  cloud-platform: "Cloud Platform"
+  data-platform: "Data Platform"
+  ml-platform: "ML Platform"
+  api-gateway: "API Gateway"
+  dev-tools: "Dev Tools"

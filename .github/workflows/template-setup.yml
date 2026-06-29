@@ -4,10 +4,18 @@
 # the HiTechCloud legal template. It customizes all legal documents with
 # the actual repository name.
 
+# It can also be triggered manually via workflow_dispatch for re-customization.
+
 name: Template Setup
 
 on:
   create:
+  workflow_dispatch:
+    inputs:
+      product_name:
+        description: "Override product name (leave empty to auto-derive from repo name)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -15,7 +23,7 @@ permissions:
 jobs:
   customize-template:
     runs-on: ubuntu-latest
-    if: github.event.ref_type == 'repository'
+    if: github.event.ref_type == 'repository' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,25 +33,34 @@ jobs:
       - name: Derive product name from repository name
         id: product
         run: |
+          # Allow manual override
+          if [ -n "${{ github.event.inputs.product_name }}" ]; then
+            PRODUCT_NAME="${{ github.event.inputs.product_name }}"
+            echo "product_name=$PRODUCT_NAME" >> "$GITHUB_OUTPUT"
+            echo "Using manually specified product name: $PRODUCT_NAME"
+            exit 0
+          fi
+
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
           # Convert repo name to display name
           # e.g., "nvidia-ai-hub" -> "NVIDIA AI Hub"
           # e.g., "sparkdeck" -> "SparkDeck"
           # e.g., "hitechcloud-legal-terms-and-policies-template" -> skip
-          
+
           # Skip if this is the template repo itself
           if [ "$REPO_NAME" = "hitechcloud-legal-terms-and-policies-template" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
+
           # Remove "hitechcloud-" prefix if present
           PRODUCT_SLUG="${REPO_NAME#hitechcloud-}"
-          
+
           # Convert slug to display name (capitalize each word, replace hyphens with spaces)
           PRODUCT_NAME=$(echo "$PRODUCT_SLUG" | sed -r 's/(^|-)([a-z])/\U\2/g' | sed 's/-/ /g')
-          
+
           # Special case mappings for known products
+          # Add more mappings here as needed
           case "$PRODUCT_SLUG" in
             nvidia-ai-hub)
               PRODUCT_NAME="NVIDIA AI Hub"
@@ -51,77 +68,185 @@ jobs:
             sparkdeck)
               PRODUCT_NAME="SparkDeck"
               ;;
+            ai-hub)
+              PRODUCT_NAME="AI Hub"
+              ;;
+            cloud-platform)
+              PRODUCT_NAME="Cloud Platform"
+              ;;
+            data-platform)
+              PRODUCT_NAME="Data Platform"
+              ;;
+            ml-platform)
+              PRODUCT_NAME="ML Platform"
+              ;;
+            api-gateway)
+              PRODUCT_NAME="API Gateway"
+              ;;
+            dev-tools)
+              PRODUCT_NAME="Dev Tools"
+              ;;
           esac
-          
+
           echo "product_name=$PRODUCT_NAME" >> "$GITHUB_OUTPUT"
           echo "product_slug=$PRODUCT_SLUG" >> "$GITHUB_OUTPUT"
           echo "repo_name=$REPO_NAME" >> "$GITHUB_OUTPUT"
           echo "Derived product name: $PRODUCT_NAME"
 
-      - name: Update README-LICENSE.md title
+      - name: Update README-LICENSE.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          REPO="${{ steps.product.outputs.repo_name }}"
-          
-          # Update English section
-          sed -i "s/# HiTechCloud Legal/# ${PRODUCT} Legal/" README-LICENSE.md
-          sed -i "s/Official legal documents, terms, policies, licensing conditions, and compliance documentation for HiTechCloud./Official legal documents, terms, policies, licensing conditions, and compliance documentation for ${PRODUCT}./" README-LICENSE.md
-          sed -i "s/legal documents used across all HiTechCloud websites, products, and services/legal documents used across all ${PRODUCT} websites, products, and services/" README-LICENSE.md
-          
-          # Update Vietnamese section
-          sed -i "s/# HiTechCloud Pháp lý/# ${PRODUCT} Pháp lý/" README-LICENSE.md
-          sed -i "s/Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho HiTechCloud./Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho ${PRODUCT}./" README-LICENSE.md
-          sed -i "s/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của HiTechCloud/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của ${PRODUCT}/" README-LICENSE.md
-          
-          # Update footer
-          sed -i "s/Bản quyền thuộc về \*\*HiTechCloud by Pho Tue SoftWare Solutions JSC\*\*/Bản quyền thuộc về \*\*${PRODUCT} by Pho Tue SoftWare Solutions JSC\*\*/" README-LICENSE.md
+          FILE="README-LICENSE.md"
+
+          # English section
+          sed -i "s/# HiTechCloud Legal/# ${PRODUCT} Legal/" "$FILE"
+          sed -i "s/Official legal documents, terms, policies, licensing conditions, and compliance documentation for HiTechCloud\./Official legal documents, terms, policies, licensing conditions, and compliance documentation for ${PRODUCT}./" "$FILE"
+          sed -i "s/legal documents used across all HiTechCloud websites, products, and services/legal documents used across all ${PRODUCT} websites, products, and services/" "$FILE"
+          sed -i "s/contact the HiTechCloud management or legal team/contact the ${PRODUCT} management or legal team/" "$FILE"
+
+          # Vietnamese section
+          sed -i "s/# HiTechCloud Pháp lý/# ${PRODUCT} Pháp lý/" "$FILE"
+          sed -i "s/Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho HiTechCloud\./Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho ${PRODUCT}./" "$FILE"
+          sed -i "s/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của HiTechCloud/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của ${PRODUCT}/" "$FILE"
+          sed -i "s/đội ngũ quản lý hoặc pháp lý của HiTechCloud/đội ngũ quản lý hoặc pháp lý của ${PRODUCT}/" "$FILE"
+
+          # Footer
+          sed -i "s/Bản quyền thuộc về \*\*HiTechCloud by Pho Tue SoftWare Solutions JSC\*\*/Bản quyền thuộc về \*\*${PRODUCT} by Pho Tue SoftWare Solutions JSC\*\*/" "$FILE"
+
+      - name: Update LICENSE
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE="LICENSE"
+          sed -i "s/(including the HiTechCloud brand)/(including the ${PRODUCT} brand)/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
 
       - name: Update NOTICE
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/HiTechCloud Legal Repository/${PRODUCT} Legal Repository/" NOTICE
-          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" NOTICE
+          FILE="NOTICE"
+          sed -i "s/HiTechCloud Legal Repository/${PRODUCT} Legal Repository/" "$FILE"
+          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
 
       - name: Update COMMERCIAL-LICENSE.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" COMMERCIAL-LICENSE.md
+          FILE="COMMERCIAL-LICENSE.md"
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
 
       - name: Update CONTRIBUTING.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/# Contributing to HiTechCloud Legal Repository/# Contributing to ${PRODUCT} Legal Repository/" CONTRIBUTING.md
-          sed -i "s/HiTechCloud legal documents repository/${PRODUCT} legal documents repository/" CONTRIBUTING.md
+          FILE="CONTRIBUTING.md"
+          sed -i "s/# Contributing to HiTechCloud Legal Repository/# Contributing to ${PRODUCT} Legal Repository/" "$FILE"
+          sed -i "s/HiTechCloud legal documents repository/${PRODUCT} legal documents repository/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
+
+      - name: Update CODE_OF_CONDUCT.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE="CODE_OF_CONDUCT.md"
+          sed -i "s/HiTechCloud/${PRODUCT}/" "$FILE"
 
       - name: Update SECURITY.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/HiTechCloud product or repository/${PRODUCT} product or repository/" SECURITY.md
+          FILE="SECURITY.md"
+          sed -i "s/HiTechCloud product or repository/${PRODUCT} product or repository/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
 
       - name: Update SUPPORT.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" SUPPORT.md
+          FILE="SUPPORT.md"
+          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
 
-      - name: Update docs
+      - name: Update docs/licensing.md
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
-          # licensing.md
-          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing.md
-          # legal-notice.md
-          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/legal-notice.md
-          sed -i "s/HiTechCloud Legal/${PRODUCT} Legal/" docs/legal-notice.md
-          # licensing-vi.md
-          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing-vi.md
-          # legal-vi.md
-          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/legal-vi.md
+          FILE="docs/licensing.md"
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
+
+      - name: Update docs/licensing-vi.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE="docs/licensing-vi.md"
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
+
+      - name: Update docs/legal-notice.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE="docs/legal-notice.md"
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" "$FILE"
+          sed -i "s/HiTechCloud Legal/${PRODUCT} Legal/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
+
+      - name: Update docs/legal-vi.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE="docs/legal-vi.md"
+          sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" "$FILE"
+          sed -i "s/HiTechCloud brand/${PRODUCT} brand/" "$FILE"
+
+      - name: Update template-config.yml
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          FILE=".github/template-config.yml"
+          sed -i "s/template_product_name: \"HiTechCloud Legal\"/template_product_name: \"${PRODUCT} Legal\"/" "$FILE"
+
+      - name: Verify no remaining HiTechCloud references
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          echo "## Template Customization Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Product name:** ${{ steps.product.outputs.product_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Repository:** ${{ steps.product.outputs.repo_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          # Count remaining HiTechCloud references (excluding .git, CODEOWNERS, ISSUE_TEMPLATE/config.yml, and this workflow)
+          REMAINING=$(grep -r "HiTechCloud" --include="*.md" --include="*.yml" --include="*.yaml" --include="*.txt" . \
+            --exclude-dir=.git \
+            --exclude="template-setup.yml" \
+            --exclude="config.yml" \
+            --exclude="CODEOWNERS" \
+            --exclude="sha256-checksums.txt" \
+            2>/dev/null | wc -l || echo "0")
+
+          echo "**Remaining HiTechCloud references:** $REMAINING" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$REMAINING" -gt 0 ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "### Remaining references:" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -r "HiTechCloud" --include="*.md" --include="*.yml" --include="*.yaml" --include="*.txt" . \
+              --exclude-dir=.git \
+              --exclude="template-setup.yml" \
+              --exclude="config.yml" \
+              --exclude="CODEOWNERS" \
+              --exclude="sha256-checksums.txt" \
+              2>/dev/null >> "$GITHUB_STEP_SUMMARY" || true
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "All references successfully updated." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Commit customization
         if: steps.product.outputs.skip != 'true'
@@ -133,11 +258,16 @@ jobs:
           git diff --cached --quiet || git commit -m "Customize template for ${PRODUCT}
 
           - Update README-LICENSE.md with product name (EN + VN)
+          - Update LICENSE with product name
           - Update NOTICE with product name
           - Update COMMERCIAL-LICENSE.md with product name
           - Update CONTRIBUTING.md with product name
+          - Update CODE_OF_CONDUCT.md with product name
           - Update SECURITY.md with product name
           - Update SUPPORT.md with product name
-          - Update docs/licensing.md, docs/legal-notice.md
-          - Update docs/licensing-vi.md, docs/legal-vi.md"
+          - Update docs/licensing.md with product name
+          - Update docs/licensing-vi.md with product name
+          - Update docs/legal-notice.md with product name
+          - Update docs/legal-vi.md with product name
+          - Update .github/template-config.yml with product name"
           git push

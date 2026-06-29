@@ -12,3 +12,6 @@ contact_links:
   - name: Documentation
     url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/tree/main/docs
     about: Check the docs/ directory for detailed documentation.
+  - name: License Information
+    url: https://github.com/hitechcloud-vietnam/hitechcloud-legal-terms-and-policies-template/blob/main/LICENSE
+    about: View the license terms for this repository.
