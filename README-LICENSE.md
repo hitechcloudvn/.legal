@@ -36,7 +36,18 @@ Copyright (c) 2026 Pho Tue SoftWare And Technology Solutions Joint Stock Company
 ├── CONTRIBUTING.md                 # Contribution guidelines
 ├── SECURITY.md                     # Security vulnerability reporting
 ├── SUPPORT.md                      # Support channels and guidance
-├── README-LICENSE.md                       # This file
+├── README-LICENSE.md               # This file
+├── .github/
+│   ├── CODEOWNERS                  # Automatic review assignment
+│   ├── template-config.yml         # Template configuration
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md           # Bug report template
+│   │   ├── feature_request.md      # Feature request template
+│   │   ├── recipe_submission.md    # Recipe submission template
+│   │   └── config.yml              # Issue template configuration
+│   └── workflows/
+│       ├── template-setup.yml      # Template customization workflow
+│       └── verify-sha256.yml       # SHA-256 integrity verification
 └── docs/
     ├── licensing.md                # Licensing guide (English)
     ├── licensing-vi.md             # Licensing guide (Vietnamese)
