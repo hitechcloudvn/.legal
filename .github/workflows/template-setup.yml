@@ -1,0 +1,119 @@
+# Template Customization Workflow
+
+# This workflow runs automatically when a new repository is created from
+# the HiTechCloud legal template. It customizes all legal documents with
+# the actual repository name.
+
+name: Template Setup
+
+on:
+  create:
+
+permissions:
+  contents: write
+
+jobs:
+  customize-template:
+    runs-on: ubuntu-latest
+    if: github.event.ref_type == 'repository'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Derive product name from repository name
+        id: product
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          # Convert repo name to display name
+          # e.g., "nvidia-ai-hub" -> "NVIDIA AI Hub"
+          # e.g., "sparkdeck" -> "SparkDeck"
+          # e.g., "hitechcloud-legal-terms-and-policies-template" -> skip
+          
+          # Skip if this is the template repo itself
+          if [ "$REPO_NAME" = "hitechcloud-legal-terms-and-policies-template" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          # Remove "hitechcloud-" prefix if present
+          PRODUCT_SLUG="${REPO_NAME#hitechcloud-}"
+          
+          # Convert slug to display name (capitalize each word, replace hyphens with spaces)
+          PRODUCT_NAME=$(echo "$PRODUCT_SLUG" | sed -r 's/(^|-)([a-z])/\U\2/g' | sed 's/-/ /g')
+          
+          # Special case mappings for known products
+          case "$PRODUCT_SLUG" in
+            nvidia-ai-hub)
+              PRODUCT_NAME="NVIDIA AI Hub"
+              ;;
+            sparkdeck)
+              PRODUCT_NAME="SparkDeck"
+              ;;
+          esac
+          
+          echo "product_name=$PRODUCT_NAME" >> "$GITHUB_OUTPUT"
+          echo "product_slug=$PRODUCT_SLUG" >> "$GITHUB_OUTPUT"
+          echo "repo_name=$REPO_NAME" >> "$GITHUB_OUTPUT"
+          echo "Derived product name: $PRODUCT_NAME"
+
+      - name: Update README.md title
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          REPO="${{ steps.product.outputs.repo_name }}"
+          
+          # Update title
+          sed -i "s/# HiTechCloud Legal/# ${PRODUCT} Legal/" README.md
+          
+          # Update subtitle
+          sed -i "s/Official legal documents, terms, policies, licensing conditions, and compliance documentation for HiTechCloud./Official legal documents, terms, policies, licensing conditions, and compliance documentation for ${PRODUCT}./" README.md
+          
+          # Update purpose section
+          sed -i "s/legal documents used across all HiTechCloud websites, products, and services/legal documents used across all ${PRODUCT} websites, products, and services/" README.md
+          
+          # Update Vietnamese title
+          sed -i "s/# HiTechCloud Pháp lý/# ${PRODUCT} Pháp lý/" README.md
+          
+          # Update Vietnamese subtitle
+          sed -i "s/Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho HiTechCloud./Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho ${PRODUCT}./" README.md
+          
+          # Update Vietnamese purpose section
+          sed -i "s/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của HiTechCloud/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của ${PRODUCT}/" README.md
+          
+          # Update footer
+          sed -i "s/Bản quyền thuộc về \*\*HiTechCloud by Pho Tue SoftWare Solutions JSC\*\*/Bản quyền thuộc về \*\*${PRODUCT} by Pho Tue SoftWare Solutions JSC\*\*/" README.md
+
+      - name: Update NOTICE
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          sed -i "s/HiTechCloud Legal Repository/${PRODUCT} Legal Repository/" NOTICE
+          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" NOTICE
+
+      - name: Update COMMERCIAL-LICENSE.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          sed -i "s/websites, products, and software solutions owned and distributed by/websites, products, and software solutions owned and distributed by/" COMMERCIAL-LICENSE.md
+
+      - name: Update CONTRIBUTING.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          sed -i "s/# Contributing to HiTechCloud Legal Repository/# Contributing to ${PRODUCT} Legal Repository/" CONTRIBUTING.md
+
+      - name: Commit customization
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Customize template for ${PRODUCT}
+
+          - Update README.md with product name
+          - Update NOTICE with product name
+          - Update CONTRIBUTING.md with product name"
+          git push

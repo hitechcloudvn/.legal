@@ -1,0 +1,18 @@
+# Template Configuration
+
+# This file contains placeholder values that the template-setup workflow
+# will replace when a new repository is created from this template.
+
+# The workflow derives the product name from the repository name automatically.
+# You can also manually customize the values below after repository creation.
+
+# Product name derived from repository name
+# Example: "nvidia-ai-hub" -> "NVIDIA AI Hub"
+# Example: "sparkdeck" -> "SparkDeck"
+template_product_name: "HiTechCloud Legal"
+
+# Company information (do not change unless authorized)
+template_company_name_en: "Pho Tue SoftWare And Technology Solutions Joint Stock Company"
+template_company_name_vi: "CÔNG TY CỔ PHẦN GIẢI PHÁP CÔNG NGHỆ VÀ PHẦN MỀM PHỔ TUỆ"
+template_tax_code: "0318222903"
+template_duns_number: "557339920"
