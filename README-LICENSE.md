@@ -14,7 +14,7 @@ Copyright (c) 2026 Pho Tue SoftWare And Technology Solutions Joint Stock Company
 
 ## Company Information
 
-- **Vietnamese legal entity name:** CONG TY CO PHAN GIAI PHAP CONG NGHE VA PHAN MEM PHO TUE
+- **Vietnamese legal entity name:** Công ty Cổ Phần Giải Pháp Công Nghệ và Phần Mềm Phổ Tuệ
 - **English legal entity name:** Pho Tue SoftWare And Technology Solutions Joint Stock Company
 - **Tax code:** 0318222903
 - **D-U-N-S Number:** 557339920
@@ -36,7 +36,7 @@ Copyright (c) 2026 Pho Tue SoftWare And Technology Solutions Joint Stock Company
 ├── CONTRIBUTING.md                 # Contribution guidelines
 ├── SECURITY.md                     # Security vulnerability reporting
 ├── SUPPORT.md                      # Support channels and guidance
-├── README.md                       # This file
+├── README-LICENSE.md                       # This file
 └── docs/
     ├── licensing.md                # Licensing guide (English)
     ├── licensing-vi.md             # Licensing guide (Vietnamese)
@@ -140,7 +140,7 @@ Copyright (c) 2026 Công ty Cổ Phần Giải Pháp Công Nghệ và Phần M�
 ├── CONTRIBUTING.md                 # Hướng dẫn đóng góp
 ├── SECURITY.md                     # Báo cáo lỗ hổng bảo mật
 ├── SUPPORT.md                      # Kênh hỗ trợ và hướng dẫn
-├── README.md                       # Tệp tin này
+├── README-LICENSE.md                       # Tệp tin này
 └── docs/
     ├── licensing.md                # Hướng dẫn cấp phép (tiếng Anh)
     ├── licensing-vi.md             # Hướng dẫn cấp phép (tiếng Việt)

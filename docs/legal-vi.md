@@ -65,7 +65,7 @@ Khi cập nhật tài liệu, mã nguồn, giao diện, nội dung phát hành, 
 - không xóa bỏ cảnh báo pháp lý nếu chưa đồng bộ thay thế tại toàn bộ tài liệu liên quan;
 - không sử dụng logo hoặc brand asset của bên thứ ba nếu chưa có căn cứ pháp lý rõ ràng;
 - không thêm câu chữ gây hiểu nhầm rằng dự án có quan hệ chính thức với bên thứ ba nếu chưa được chấp thuận bằng văn bản; và
-- đồng bộ nội dung pháp lý giữa `README.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, và `docs/legal-vi.md`.
+- đồng bộ nội dung pháp lý giữa `README-LICENSE.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, và `docs/legal-vi.md`.
 
 ## 8. Liên hệ và rà soát pháp lý
 

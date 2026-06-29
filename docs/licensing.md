@@ -16,7 +16,7 @@ All repositories and software solutions published by the copyright holder are so
 
 Official company details:
 
-- Vietnamese legal entity name: CONG TY CO PHAN GIAI PHAP CONG NGHE VA PHAN MEM PHO TUE
+- Vietnamese legal entity name: Công ty Cổ Phần Giải Pháp Công Nghệ và Phần Mềm Phổ Tuệ
 - English legal entity name: Pho Tue SoftWare And Technology Solutions Joint Stock Company
 - Tax code: 0318222903
 - D-U-N-S Number: 557339920

@@ -70,7 +70,7 @@ Repository workflows run automatically when their path and event filters match. 
 
 When changing legal, licensing, or policy content, review and update as needed:
 
-- [`README.md`](../README.md)
+- [`README-LICENSE.md`](../README-LICENSE.md)
 - [`NOTICE`](../NOTICE)
 - [`LICENSE`](../LICENSE)
 - [`COMMERCIAL-LICENSE.md`](../COMMERCIAL-LICENSE.md)

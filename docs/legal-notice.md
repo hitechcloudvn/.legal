@@ -17,7 +17,7 @@ All repositories and software solutions published in this GitHub organization ar
 
 Official company details:
 
-- Vietnamese legal entity name: CONG TY CO PHAN GIAI PHAP CONG NGHE VA PHAN MEM PHO TUE
+- Vietnamese legal entity name: Công ty Cổ Phần Giải Pháp Công Nghệ và Phần Mềm Phổ Tuệ
 - English legal entity name: Pho Tue SoftWare And Technology Solutions Joint Stock Company
 - Tax code: 0318222903
 - D-U-N-S Number: 557339920
@@ -67,7 +67,7 @@ When updating repository materials:
 - do not remove legal disclaimers without replacing them consistently across the repository;
 - do not use third-party logos or brand assets unless there is a confirmed legal basis to do so;
 - do not introduce language implying official third-party relationships without written authorization; and
-- keep legal wording synchronized across `README.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, and `docs/legal-vi.md`.
+- keep legal wording synchronized across `README-LICENSE.md`, `NOTICE`, `LICENSE`, `COMMERCIAL-LICENSE.md`, `docs/licensing.md`, and `docs/legal-vi.md`.
 
 ## Questions
 
