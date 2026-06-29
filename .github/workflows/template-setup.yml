@@ -58,32 +58,24 @@ jobs:
           echo "repo_name=$REPO_NAME" >> "$GITHUB_OUTPUT"
           echo "Derived product name: $PRODUCT_NAME"
 
-      - name: Update README-LICENSE.md title
+      - name: Update README.md title
         if: steps.product.outputs.skip != 'true'
         run: |
           PRODUCT="${{ steps.product.outputs.product_name }}"
           REPO="${{ steps.product.outputs.repo_name }}"
           
-          # Update title
-          sed -i "s/# HiTechCloud Legal/# ${PRODUCT} Legal/" README-LICENSE.md
+          # Update English section
+          sed -i "s/# HiTechCloud Legal/# ${PRODUCT} Legal/" README.md
+          sed -i "s/Official legal documents, terms, policies, licensing conditions, and compliance documentation for HiTechCloud./Official legal documents, terms, policies, licensing conditions, and compliance documentation for ${PRODUCT}./" README.md
+          sed -i "s/legal documents used across all HiTechCloud websites, products, and services/legal documents used across all ${PRODUCT} websites, products, and services/" README.md
           
-          # Update subtitle
-          sed -i "s/Official legal documents, terms, policies, licensing conditions, and compliance documentation for HiTechCloud./Official legal documents, terms, policies, licensing conditions, and compliance documentation for ${PRODUCT}./" README-LICENSE.md
-          
-          # Update purpose section
-          sed -i "s/legal documents used across all HiTechCloud websites, products, and services/legal documents used across all ${PRODUCT} websites, products, and services/" README-LICENSE.md
-          
-          # Update Vietnamese title
-          sed -i "s/# HiTechCloud Pháp lý/# ${PRODUCT} Pháp lý/" README-LICENSE.md
-          
-          # Update Vietnamese subtitle
-          sed -i "s/Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho HiTechCloud./Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho ${PRODUCT}./" README-LICENSE.md
-          
-          # Update Vietnamese purpose section
-          sed -i "s/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của HiTechCloud/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của ${PRODUCT}/" README-LICENSE.md
+          # Update Vietnamese section
+          sed -i "s/# HiTechCloud Pháp lý/# ${PRODUCT} Pháp lý/" README.md
+          sed -i "s/Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho HiTechCloud./Tài liệu pháp lý chính thức, điều khoản, chính sách, điều kiện cấp phép và tài liệu tuân thủ cho ${PRODUCT}./" README.md
+          sed -i "s/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của HiTechCloud/tài liệu pháp lý trung tâm được sử dụng trên tất cả các website, sản phẩm và dịch vụ của ${PRODUCT}/" README.md
           
           # Update footer
-          sed -i "s/Bản quyền thuộc về \*\*HiTechCloud by Pho Tue SoftWare Solutions JSC\*\*/Bản quyền thuộc về \*\*${PRODUCT} by Pho Tue SoftWare Solutions JSC\*\*/" README-LICENSE.md
+          sed -i "s/Bản quyền thuộc về \*\*HiTechCloud by Pho Tue SoftWare Solutions JSC\*\*/Bản quyền thuộc về \*\*${PRODUCT} by Pho Tue SoftWare Solutions JSC\*\*/" README.md
 
       - name: Update NOTICE
         if: steps.product.outputs.skip != 'true'
@@ -111,6 +103,12 @@ jobs:
           PRODUCT="${{ steps.product.outputs.product_name }}"
           sed -i "s/HiTechCloud product or repository/${PRODUCT} product or repository/" SECURITY.md
 
+      - name: Update SUPPORT.md
+        if: steps.product.outputs.skip != 'true'
+        run: |
+          PRODUCT="${{ steps.product.outputs.product_name }}"
+          sed -i "s/HiTechCloud websites, products, and services/${PRODUCT} websites, products, and services/" SUPPORT.md
+
       - name: Update docs
         if: steps.product.outputs.skip != 'true'
         run: |
@@ -119,6 +117,7 @@ jobs:
           sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing.md
           # legal-notice.md
           sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/legal-notice.md
+          sed -i "s/HiTechCloud Legal/${PRODUCT} Legal/" docs/legal-notice.md
           # licensing-vi.md
           sed -i "s/HiTechCloud websites, products, and software solutions/${PRODUCT} websites, products, and software solutions/" docs/licensing-vi.md
           # legal-vi.md
@@ -133,11 +132,12 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "Customize template for ${PRODUCT}
 
-          - Update README-LICENSE.md with product name (EN + VN)
+          - Update README.md with product name (EN + VN)
           - Update NOTICE with product name
           - Update COMMERCIAL-LICENSE.md with product name
           - Update CONTRIBUTING.md with product name
           - Update SECURITY.md with product name
+          - Update SUPPORT.md with product name
           - Update docs/licensing.md, docs/legal-notice.md
           - Update docs/licensing-vi.md, docs/legal-vi.md"
           git push

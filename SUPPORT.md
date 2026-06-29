@@ -44,7 +44,7 @@ Use:
 
 Review the relevant docs first:
 
-- [`README-LICENSE.md`](./README-LICENSE.md)
+- [`README.md`](./README.md)
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 - [`SECURITY.md`](./SECURITY.md) when security may be involved
 
@@ -72,7 +72,7 @@ When reporting issues, be explicit about:
 
 ## 5. Legal note
 
-For legal and licensing terms, use the files listed in the licensing section of [`README-LICENSE.md`](./README-LICENSE.md).
+For legal and licensing terms, use the files listed in the licensing section of [`README.md`](./README.md).
 
 Questions about trademark attribution, no-endorsement wording, commercial boundary interpretation, or external publication should be routed through the legal and licensing documents before any public or customer-facing use.
 
@@ -124,7 +124,7 @@ Sử dụng:
 
 Xem xét tài liệu liên quan trước:
 
-- [`README-LICENSE.md`](./README-LICENSE.md)
+- [`README.md`](./README.md)
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 - [`SECURITY.md`](./SECURITY.md) khi có liên quan đến bảo mật
 
@@ -152,6 +152,6 @@ Khi báo cáo sự cố, hãy rõ ràng về:
 
 ## 5. Ghi chú pháp lý
 
-Đối với điều khoản pháp lý và cấp phép, sử dụng các tệp được liệt kê trong phần cấp phép của [`README-LICENSE.md`](./README-LICENSE.md).
+Đối với điều khoản pháp lý và cấp phép, sử dụng các tệp được liệt kê trong phần cấp phép của [`README.md`](./README.md).
 
 Câu hỏi về ghi nhận nhãn hiệu, nội dung không chứng nhận, diễn giải ranh giới thương mại hoặc công bố ra bên ngoài nên được định tuyến thông qua tài liệu pháp lý và cấp phép trước khi sử dụng công khai hoặc面向 khách hàng.
