@@ -20,3 +20,4 @@ f447024a03a7ea637917cf6a6efdbcea833843ac4427e0f83c60a44fdd1a8f4c  ./SECURITY.md
 73e6479c12b3dd7068584329961d84eab584e56ee9e47fdf1dc0892db305dfc0  ./docs/licensing.md
 4ba7f3bfde3e1c226b36ae12284ad6b65f98d6fd69a711bff245e05b28e93c41  ./docs/maintenance.md
 fd59597f95a91c8d7bc1db03ac9166ee39871cfacf80f83bf9193dba26e5a350  ./docs/pull-requests.md
+cde32b4636504f7c1a7513bcb445fe5cbda2a45dad1dd4802d7d085e344c45e9  ./sha256-checksums-new.txt
